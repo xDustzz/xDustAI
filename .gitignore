@@ -23,9 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
-# ignore
-node_modules/
+#ignore
 dist-electron/
 dist/
 *.exe
-*.zip
+*.asar
