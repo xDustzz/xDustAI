@@ -1,7 +1,7 @@
 {
   "name": "xdustai",
   "private": true,
-  "version": "2.6.1",
+  "version": "2.6.2",
   "type": "module",
   "homepage": "https://xDustzz.github.io/xDustAI/",
   "main": "electron-main.cjs",

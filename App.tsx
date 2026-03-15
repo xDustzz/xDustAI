@@ -132,6 +132,7 @@ function App() {
   const [loadingStatus, setLoadingStatus] = useState('Thinking');
   const [theme, setTheme] = useState<Theme>(Theme.PURPLE_BLUE);
   const [showSettings, setShowSettings] = useState(false);
+  const [showDownloadMenu, setShowDownloadMenu] = useState(false);
   const [settingsPage, setSettingsPage] = useState<'general' | 'credits'>('general');
 
   const [showClearConfirm, setShowClearConfirm] = useState(false);
@@ -170,6 +171,7 @@ function App() {
 
   const langMenuRef = useRef<HTMLDivElement>(null);
   const attachMenuRef = useRef<HTMLDivElement>(null);
+  const downloadMenuRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
@@ -250,6 +252,16 @@ function App() {
   }, []); 
 
   useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (downloadMenuRef.current && !downloadMenuRef.current.contains(event.target as Node)) {
+        setShowDownloadMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isLoading, attachments, editingMessageId]); 
 
@@ -276,8 +288,8 @@ function App() {
 
   const processFiles = async (files: File[]) => {
       const validFiles = files.filter(file => {
-        if (file.size > 8 * 1024 * 1024) { 
-            alert(`File ${file.name} is too large. Max 8MB.`);
+        if (file.size > 300 * 1024 * 1024) { 
+            alert(`File ${file.name} is too large. Max 300MB.`);
             return false;
         }
         return true;
@@ -977,6 +989,27 @@ function App() {
 
       {/* FIXED POSITION BUTTONS - CONFIRMING TRASH IS HERE */}
       <div className="fixed top-4 right-4 md:top-6 md:right-6 z-50 flex gap-3 md:gap-4 pointer-events-auto">
+        <div className="relative" ref={downloadMenuRef}>
+          <button 
+            onClick={() => setShowDownloadMenu(!showDownloadMenu)}
+            className="p-2.5 md:p-3 rounded-full liquid-glass liquid-glass-interactive hover:bg-white/20 hover:scale-110 active:scale-95 transition-all duration-300 text-white/80 hover:text-white shadow-lg"
+            data-tooltip="Download App"
+          >
+            <Download size={18} className="md:w-5 md:h-5" />
+          </button>
+          {showDownloadMenu && (
+            <div className="absolute right-0 mt-2 w-48 rounded-xl liquid-glass border border-white/10 shadow-2xl overflow-hidden z-50 animate-slide-up">
+              <a href="https://github.com/xDustzz/xDustAI/releases/download/v2.6.2/xDustAI.apk" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors text-sm text-white/90 hover:text-white border-b border-white/5">
+                <Download size={16} />
+                Download .apk
+              </a>
+              <a href="https://github.com/xDustzz/xDustAI/releases/download/v2.6.2/xDustAI.exe" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors text-sm text-white/90 hover:text-white">
+                <Download size={16} />
+                Download .exe
+              </a>
+            </div>
+          )}
+        </div>
         <button 
           onClick={() => setShowClearConfirm(true)}
           className="p-2.5 md:p-3 rounded-full liquid-glass liquid-glass-interactive hover:bg-white/20 hover:scale-110 active:scale-95 transition-all duration-300 text-white/80 hover:text-red-400 shadow-lg hover:shadow-red-500/20"
@@ -1533,7 +1566,7 @@ function App() {
                                         <div className="p-2.5 rounded-xl bg-purple-500/20 text-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.2)]"><Tag size={18} /></div>
                                         <span className="text-sm font-semibold text-white/90">{langPack.version}</span>
                                     </div>
-                                    <span className="text-sm font-bold bg-white/10 px-2 py-0.5 rounded text-white/80 font-mono border border-white/5">v2.6.1</span>
+                                    <span className="text-sm font-bold bg-white/10 px-2 py-0.5 rounded text-white/80 font-mono border border-white/5">v2.6.2</span>
                                 </div>
                             </div>
                        </div>
