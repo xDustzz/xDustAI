@@ -23,8 +23,35 @@ dist-ssr
 *.sln
 *.sw?
 
-#ignore
-dist-electron/
+# Rahasia & API Keys
+.env
+.env.local
+.env.*.local
+
+# Folder Hasil Build (Besar & Berat)
 dist/
-*.exe
-*.asar
+dist-electron/
+release/
+out/
+build/
+
+# Folder Mobile (Android/iOS)
+android/
+ios/
+*.apk
+*.aab
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# File Log & Sampah System
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+desktop.ini
+.DS_Store
+
+# File Metadata Visual Studio Code
+.vscode/
